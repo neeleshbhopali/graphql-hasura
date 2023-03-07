@@ -6,7 +6,7 @@ import config from '../../../../config';
 import { sign } from 'jsonwebtoken';
 import LoginResponse from '../types/objects/login';
 import { isAuth } from '../../../../utils/jwt';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import AuthenticationError from '../../../../errors/error';
 
 @Resolver()
