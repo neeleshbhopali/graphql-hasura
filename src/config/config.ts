@@ -12,7 +12,8 @@ const loadConfig = (schema: Joi.ObjectSchema, envs: NodeJS.ProcessEnv) => {
   return {
     port: envVars.PORT,
     hasura_url: envVars.HASURA_URL,
-    secret: envVars.ACCESS_TOKEN_PRIVATE_KEY
+    secret: envVars.ACCESS_TOKEN_PRIVATE_KEY,
+    admin_pass: envVars.ADMIN_PASS
   };
 };
 

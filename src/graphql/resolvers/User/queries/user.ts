@@ -6,14 +6,18 @@ import config from '../../../../config';
 import { sign } from 'jsonwebtoken';
 import LoginResponse from '../types/objects/login';
 import { isAuth } from '../../../../utils/jwt';
+import bcrypt from 'bcrypt';
+import AuthenticationError from '../../../../errors/error';
 
 @Resolver()
 class UserResolver {
 
   @Mutation(() => LoginResponse)
-  async Login(@Arg("id") id: number) {
+  async Login(@Arg("username") username: string, @Arg("password") password: string) {
+    const result = await bcrypt.compare(password, config.admin_pass)
+    if (username !== 'admin' || !result) throw new AuthenticationError('Please enter a valid username and password', 402)
     return {
-      accessToken: sign({ id }, config.secret, {
+      accessToken: sign({ username }, config.secret, {
         expiresIn: "30d"
       })
     };
