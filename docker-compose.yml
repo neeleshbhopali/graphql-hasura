@@ -1,36 +1,40 @@
-version: '3'
+version: "3"
 
 services:
   test:
     container_name: test
     build: .
     ports:
-      - "5001:5001"
+      - "5001:5000"
     networks:
-      - gadgetfreeiot      
+      - gadgetfreeiot 
     volumes:
       - .:/app
     links:
-      - postgres
+      - "postgres"      
   postgres:
-    image: postgres:14
+    image: "postgis/postgis:14-3.3-alpine"
     restart: always
-    ports:
-      - '5434:5432'  
-    networks:
-      - gadgetfreeiot        
     volumes:
-    - db_data:/var/lib/postgresql/data
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - gadgetfreeiot 
     environment:
+      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgrespassword
   graphql-engine:
     image: hasura/graphql-engine:v2.20.0
     ports:
-    - "8080:8080"
+      - "8080:8080"
     networks:
-    - gadgetfreeiot    
+      - gadgetfreeiot 
     depends_on:
-    - "postgres"
+      - "postgres"
+      - "test"
+    links:
+      - "test"      
     restart: always
     environment:
       ## postgres database to store Hasura metadata
@@ -46,7 +50,12 @@ services:
       # HASURA_GRAPHQL_CONSOLE_ASSETS_DIR: /srv/console-assets
       ## uncomment next line to set an admin secret
       # HASURA_GRAPHQL_ADMIN_SECRET: myadminsecretkey
+    command:
+      - graphql-engine
+      - serve
+      - --enable-console     
 volumes:
   db_data:
+
 networks:
   gadgetfreeiot:
