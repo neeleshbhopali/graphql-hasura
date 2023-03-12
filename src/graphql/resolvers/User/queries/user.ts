@@ -5,7 +5,7 @@ import Location from '../types/objects/location';
 import config from '../../../../config';
 import { sign } from 'jsonwebtoken';
 import LoginResponse from '../types/objects/login';
-import { isAuth } from '../../../../utils/jwt';
+import { isAuth } from '../../../../utils/jwt.authentication';
 import bcrypt from 'bcryptjs';
 import AuthenticationError from '../../../../errors/error';
 
